@@ -7,10 +7,12 @@ class Answer extends StatefulWidget {
     required this.number,
     required this.isTrue,
     required this.onSelect,
+    required this.isFinished,
   });
   final String answer;
   final int number;
   final bool isTrue;
+  final bool isFinished;
   final bool Function(bool) onSelect;
   @override
   _AnswerState createState() => _AnswerState();
@@ -18,20 +20,18 @@ class Answer extends StatefulWidget {
 
 class _AnswerState extends State<Answer> {
   bool isSelected = false;
-  @override
-  void initState() {
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        setState(() {
-          // isSelected = !isSelected;
-          isSelected = widget.onSelect.call(widget.isTrue);
-        });
-      },
+      onTap: !widget.isFinished
+          ? null
+          : () {
+              setState(() {
+                // isSelected = !isSelected;
+                isSelected = widget.onSelect.call(widget.isTrue);
+              });
+            },
       child: Card(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(

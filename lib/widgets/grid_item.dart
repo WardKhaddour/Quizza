@@ -82,7 +82,9 @@ class _GridItemState extends State<GridItem> {
         // key: _key,
         padding:
             _isSelected ? const EdgeInsets.all(8) : const EdgeInsets.all(16),
-        child: Container(
+        child: AnimatedContainer(
+          curve: Curves.easeIn,
+          duration: Duration(milliseconds: 500),
           decoration: BoxDecoration(
             color: _isSelected ? kBlueColor : kGreyColor,
             borderRadius: BorderRadius.all(

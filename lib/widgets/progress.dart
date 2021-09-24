@@ -8,17 +8,20 @@ class Progress extends StatelessWidget {
   const Progress(
       {Key? key,
       required this.level,
-      required this.progress,
+      required this.levelsCount,
       required this.endTime,
       required this.quistionDuration})
       : super(key: key);
   final int level;
-  final int progress;
+  // final double progress = level/levelsCount;
   final bool endTime;
   final int quistionDuration;
+  final int levelsCount;
 
   @override
   Widget build(BuildContext context) {
+    final progress = level / levelsCount;
+    final isFinished = level >= levelsCount;
     return TweenAnimationBuilder(
       tween: Tween(begin: 0.0, end: 1.0),
       duration: Duration(seconds: 0),
@@ -35,8 +38,8 @@ class Progress extends StatelessWidget {
                   return SweepGradient(
                     startAngle: 0.0,
                     stops: [
-                      progress.toDouble() / 100,
-                      progress.toDouble() / 100
+                      progress,
+                      progress,
                     ],
                     colors: endTime
                         ? [
@@ -64,29 +67,33 @@ class Progress extends StatelessWidget {
                     color: endTime ? kRedColor : Colors.white,
                     shape: BoxShape.circle,
                   ),
-                  child: Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          endTime ? 'Time Out' : "$quistionDuration",
-                          style: TextStyle(
-                            fontSize: 25,
-                            color: endTime ? Colors.white : Colors.blue,
-                            fontWeight: FontWeight.bold,
+                  child: isFinished
+                      ? Center(
+                          child: Text('Finished'),
+                        )
+                      : Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                endTime ? 'Time Out' : "$quistionDuration",
+                                style: TextStyle(
+                                  fontSize: 25,
+                                  color: endTime ? Colors.white : Colors.blue,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              Text(
+                                "Level $level",
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  color: endTime ? Colors.white : Colors.blue,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
-                        Text(
-                          "Level $level",
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: endTime ? Colors.white : Colors.blue,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
                 ),
               )
             ],
