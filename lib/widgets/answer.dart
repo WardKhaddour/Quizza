@@ -2,22 +2,34 @@ import 'package:flutter/material.dart';
 import '../constants.dart';
 
 class Answer extends StatefulWidget {
-  const Answer(this.answer, {Key? key}) : super(key: key);
+  const Answer({
+    required this.answer,
+    required this.number,
+    required this.isTrue,
+    required this.onSelect,
+  });
   final String answer;
-
+  final int number;
+  final bool isTrue;
+  final bool Function(bool) onSelect;
   @override
   _AnswerState createState() => _AnswerState();
 }
 
 class _AnswerState extends State<Answer> {
   bool isSelected = false;
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
         setState(() {
-          isSelected = !isSelected;
+          // isSelected = !isSelected;
+          isSelected = widget.onSelect.call(widget.isTrue);
         });
       },
       child: Card(
@@ -26,12 +38,22 @@ class _AnswerState extends State<Answer> {
             Radius.circular(30),
           ),
         ),
-        color: isSelected ? kBlueColor : Colors.white,
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Text(
+        color: isSelected
+            ? widget.isTrue
+                ? kGreenColor
+                : kRedColor
+            : Colors.white,
+        child: ListTile(
+          leading: CircleAvatar(
+            backgroundColor:
+                isSelected ? Colors.white : kGreyColor.withOpacity(0.5),
+            child: Text(widget.number.toString(),
+                style: TextStyle(fontSize: 16, color: kGreyColor)),
+          ),
+          title: Text(
             widget.answer,
-            style: TextStyle(fontSize: 24),
+            style: TextStyle(
+                fontSize: 16, color: isSelected ? Colors.white : kGreyColor),
           ),
         ),
       ),
